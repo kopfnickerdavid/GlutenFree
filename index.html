@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- verhindert, dass Webseiten gezommt werden können, 1 Pixel = 1 Pixel -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="keywords" content="Gluten, Free, Essen, Food, Restaurant, Bar, Stadt" />
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="maincss.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt"
+        crossorigin="anonymous">
+
+    <title>Free</title>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+        crossorigin="anonymous"></script>
+
+</head>
+
+<body class="text-center">
+
+    <header class="header">
+        <div class="inner">
+            <nav class="navbar justify-content-center navbar-dark bg-dark ">
+                <a class="navbar-brand" href="index.html">FREE</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbarToggler">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbar">
+                    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">Home
+                                <span class="sr-only">(current)</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Link</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled" href="#">Disabled</a>
+                        </li>
+                    </ul>
+                </div>
+
+            </nav>
+        </div>
+    </header>
+
+    
+        <div class="tease">
+            <h2>
+                FIND YOUR RIGHT PLACE TO EAT
+            </h2>
+            <h4>TYPE IN YOUR CITY</h4>
+        </div>
+
+      
+    <div class="main" id="main">
+        <div class="search">
+            <span class="fa fa-search"></span>
+            <span class="far fa-dot-circle" onclick="geoLocation()"></span>
+            <input type="text" name="delivery_location" id="pac-input" class="form-control" placeholder="Search" required>
+        </div>
+    </div> 
+<!-- 
+        <div id="infowindow-content">
+            <img src="" width="16" height="16" id="place-icon">
+            <span id="place-name" class="title"></span>
+            <br>
+            <span id="place-address"></span>
+        </div> -->
+  
+        <script>
+            var infowindow;
+            var pos;
+            var searchBox;
+            // Geolocation_____________________________________________________________________
+            function geoLocation() {
+
+                infoWindow = new google.maps.InfoWindow;
+                // Try HTML5 geolocation.
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function (position) {
+                        pos = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+
+                        // infoWindow.setPosition(pos);
+                        // infoWindow.open(map);
+
+                        console.log(pos);
+                        return createMap(pos, searchBox);
+                    });
+
+
+                } else {
+                    // Browser doesn't support Geolocation
+                    handleLocationError(false, infoWindow);
+                }
+            }
+
+            function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+                infoWindow.setPosition(pos);
+                infoWindow.setContent(browserHasGeolocation ?
+                    'Error: The Geolocation service failed.' :
+                    'Error: Your browser doesn\'t support geolocation.');
+                infoWindow.open(map);
+            }
+
+            function initSearch(pos, searchBox) {
+
+
+                var map;
+
+
+                // SearchBox and Autocomplete_________________________________________________    
+                // Create the search box and link it to the UI element.
+                // document.getElementById("pac-input") = style.display = "none";
+
+                var input = document.getElementById('pac-input');
+
+                searchBox = new google.maps.places.SearchBox(input);
+                document.getElementById('pac-input').onkeydown = function (event) {
+                    if (event.keyCode == 13) {
+                        return createMap(pos, searchBox);
+                    }
+                }
+            }
+            function createMap(pos, searchBox) {  
+                var newDiv = document.createElement("div");
+                newDiv.id = "map";
+                // füge das neu erstellte Element und seinen Inhalt ins DOM ein
+                // document.body.appendChild(newDiv); 
+                document.getElementById("main").appendChild(newDiv);
+                return initMap(pos, searchBox);
+
+            }
+            function initMap(pos, searchBox) {
+
+                map = new google.maps.Map(document.getElementById('map'), {
+                    zoom: 16,
+                    center: pos,
+
+                });
+                map.setCenter(pos);
+                searchBox.addListener(map)
+                // Bias the SearchBox results towards current map's viewport.
+                map.addListener('bounds_changed', function () {
+                    searchBox.setBounds(map.getBounds());
+                });
+
+                var markers = [];
+                // Listen for the event fired when the user selects a prediction and retrieve
+                // more details for that place.
+
+                searchBox.addListener('places_changed', function () {
+
+
+                    var places = searchBox.getPlaces();
+
+                    if (places.length == 0) {
+                        return;
+                    }
+
+                    // Clear out the old markers.
+                    markers.forEach(function (marker) {
+                        marker.setMap(null);
+                    });
+                    markers = [];
+
+                    // For each place, get the icon, name and location.
+                    var bounds = new google.maps.LatLngBounds();
+                    places.forEach(function (place) {
+                        if (!place.geometry) {
+                            console.log("Returned place contains no geometry");
+                            return;
+                        }
+                        var icon = {
+                            url: place.icon,
+                            size: new google.maps.Size(71, 71),
+                            origin: new google.maps.Point(0, 0),
+                            anchor: new google.maps.Point(17, 34),
+                            scaledSize: new google.maps.Size(25, 25)
+                        };
+
+                        // Create a marker for each place.
+                        markers.push(new google.maps.Marker({
+                            map: map,
+                            icon: icon,
+                            title: place.name,
+                            position: place.geometry.location
+                        }));
+
+                        if (place.geometry.viewport) {
+                            // Only geocodes have viewport.
+                            bounds.union(place.geometry.viewport);
+                        } else {
+                            bounds.extend(place.geometry.location);
+                        }
+                    });
+                    map.fitBounds(bounds);
+
+
+                });
+
+            }
+
+
+
+        </script>
+
+
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTrH-qGsqemebTkqfviyLS5NsE4pDvM6o&libraries=places&callback=initSearch"></script>
+</body>
+
+</html>

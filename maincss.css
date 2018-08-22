@@ -1,0 +1,53 @@
+@import url("https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css");
+
+
+.tease {
+    margin-top: 1em;
+    padding: 1em;
+
+}
+.main {
+    margin: 1em;
+    padding: 1em;
+
+}
+
+.search {
+    position: relative;
+    margin-top: 0%;
+    margin: 3em;
+    padding: 1em;
+
+}
+
+.search input {
+    background: #fcfcfc;
+  border: 1px solid #aaa;
+  border-radius: 5px;
+  box-shadow: 0 0 3px #ccc, 0 10px 15px #ebebeb inset;
+}
+.search input { 
+    text-indent: 32px;
+}
+
+.search .fa-search { 
+    position: absolute;
+    top: 28px;
+    left: 30px;
+    color: #ccc;
+  }
+
+.search .fa-dot-circle  {
+    position: absolute;
+    top: 28px;
+    right: 30px;
+    color: blue;
+
+}
+
+#map {
+    
+    height:400px;
+    margin: 2em;
+    padding: 2em;
+  }
